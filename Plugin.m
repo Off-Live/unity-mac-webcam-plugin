@@ -39,3 +39,17 @@ UNITY_PLUGIN_EXPORT void StopCapture(void){
         [webcam stopCapture];
     }
 }
+
+UNITY_PLUGIN_EXPORT id<MTLTexture> GetTexturePtr(void){
+    if(webcam){
+        return webcam.metalTexture;
+    }
+    return nil;
+}
+
+UNITY_PLUGIN_EXPORT void ReleaseTexture(void){
+    if(webcam){
+        [webcam releaseTexture];
+    }
+}
+

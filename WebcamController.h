@@ -22,12 +22,18 @@ NS_ASSUME_NONNULL_BEGIN
     CFRunLoopRef _runLoop;
     NSThread * _thread;
     NSCondition* _startedCV;
+    CVMetalTextureRef _imageTexture;
 }
+
+@property (nonatomic, weak) id<MTLTexture> metalTexture;
+
 
 -(void) initCaptureSession;
 -(void) doWork;
 -(void) startCapture;
 -(void) stopCapture;
+-(void) releaseTexture;
+
 
 
 +(NSString*) GetFormatName: (int) type;

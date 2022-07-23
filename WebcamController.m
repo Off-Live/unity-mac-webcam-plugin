@@ -15,7 +15,6 @@
 {
     self = [super init];
     _startedCV = [[NSCondition alloc] init];
-    
     return self;
 }
 
@@ -122,12 +121,20 @@
     size_t width = CVPixelBufferGetWidth(frame);
     size_t height = CVPixelBufferGetHeight(frame);
     
-    CVMetalTextureRef imageTexture;
-    CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, _textureCache, frame, nil, MTLPixelFormatBGRA8Unorm, width, height, 0, &imageTexture);
-    id<MTLTexture> mtlTex = CVMetalTextureGetTexture(imageTexture);
-    CVBufferRelease(imageTexture);
-    NSLog(@"MYTY Webcam : %lu %lu %d %lu",mtlTex.width, mtlTex.height,height, mtlTex.pixelFormat);
-  
+    if(!_imageTexture){
+        CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, _textureCache, frame, nil, MTLPixelFormatBGRA8Unorm, width, height, 0, &_imageTexture);
+    
+        self.metalTexture = CVMetalTextureGetTexture(_imageTexture);
+        NSLog(@"MYTY Webcam : %lu %lu %lu %@",_metalTexture.width, _metalTexture.height, _metalTexture.pixelFormat, _metalTexture);
+        
+    }
+}
+
+-(void)releaseTexture{
+    if(_imageTexture){
+        CVBufferRelease(_imageTexture);
+        _imageTexture = nil;
+    }
 }
 
 +(NSString*) GetFormatName:(int)type{
