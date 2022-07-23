@@ -6,8 +6,9 @@
 //
 
 #import "WebcamController.h"
-@import Metal;
-@import MetalKit;
+#import <Metal/Metal.h>
+#import <MetalKit/MetalKit.h>
+
 
 @implementation WebcamController
 
@@ -41,7 +42,6 @@
 
 -(void) doWork
 {
-    _metalDevice = MTLCreateSystemDefaultDevice();
     CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, _metalDevice, nil, &_textureCache);
     
     _runLoop = CFRunLoopGetCurrent();
@@ -77,7 +77,7 @@
 
     [video_output setVideoSettings:@{
         (NSString*)kCVPixelBufferPixelFormatTypeKey:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
-        (NSString*)kCVPixelBufferWidthKey : [NSNumber numberWithInt:720],
+        (NSString*)kCVPixelBufferWidthKey : [NSNumber numberWithInt:640],
         (NSString*)kCVPixelBufferHeightKey : [NSNumber numberWithInt:360],
         
     }];
