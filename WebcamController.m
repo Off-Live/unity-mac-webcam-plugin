@@ -23,7 +23,6 @@
 {
     [self stopCapture];
     _session = nil;
-    CFRelease(_textureCache);
     
     NSLog(@"MYTY Webcam : webcam deinit %hhd", [_thread isExecuting]);
     

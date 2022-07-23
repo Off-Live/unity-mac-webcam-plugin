@@ -20,46 +20,6 @@ static float g_Time;
 
 extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetTimeFromUnity (float t) { g_Time = t; }
 
-extern "C" int UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API InitPlugin(void){
-    if(webcam){
-        [webcam initCaptureSession];
-    }
-    return 1;
-}
-
-extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UninitPlugin(void){
-    if(webcam){
-        webcam = nil;
-        IUnityGraphicsMetal *metal = (IUnityGraphicsMetal*) s_CurrentAPI->GetGraphicsInterface();
-        webcam = [[WebcamController alloc] init];
-        webcam.metalDevice = metal->MetalDevice();
-    }
-}
-
-extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API StartCapture(void){
-    if(webcam){
-        [webcam startCapture];
-    }
-}
-extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API StopCapture(void){
-    if(webcam){
-        [webcam stopCapture];
-    }
-}
-
-extern "C"  id<MTLTexture>  UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetTexturePtr(void){
-    if(webcam){
-        return webcam.metalTexture;
-    }
-    return nil;
-}
-
-extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API ReleaseTexture(void){
-    if(webcam){
-        [webcam releaseTexture];
-    }
-}
-
 
 // --------------------------------------------------------------------------
 // SetTextureFromUnity, an example function we export which is called by one of the scripts.
@@ -156,6 +116,7 @@ extern "C" void	UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnit
 extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()
 {
 	s_Graphics->UnregisterDeviceEventCallback(OnGraphicsDeviceEvent);
+    webcam = nil;
 }
 
 #if UNITY_WEBGL
@@ -353,3 +314,50 @@ extern "C" UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetRen
 	return OnRenderEvent;
 }
 
+
+
+extern "C" int UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API InitPlugin(void){
+    if(webcam){
+        [webcam initCaptureSession];
+    }
+    return 1;
+}
+
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UninitPlugin(void){
+    if(webcam){
+        webcam = nil;
+        IUnityGraphicsMetal *metal = (IUnityGraphicsMetal*) s_CurrentAPI->GetGraphicsInterface();
+        webcam = [[WebcamController alloc] init];
+        webcam.metalDevice = metal->MetalDevice();
+    }
+}
+
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API StartCapture(void){
+    if(webcam){
+        [webcam startCapture];
+    }
+}
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API StopCapture(void){
+    if(webcam){
+        [webcam stopCapture];
+    }
+}
+
+
+
+extern "C"  id<MTLTexture>  UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetTexturePtr(void){
+    if(webcam){
+        if(webcam.metalTexture){
+            s_CurrentAPI->CopyTexture((void*)CFBridgingRetain(webcam.metalTexture), g_TextureHandle);
+            return webcam.metalTexture;
+        }else return nil;
+    }
+    return nil;
+}
+
+
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API ReleaseTexture(void){
+    if(webcam){
+        [webcam releaseTexture];
+    }
+}

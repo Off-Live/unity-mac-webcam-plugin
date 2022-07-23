@@ -30,6 +30,8 @@ public:
 	virtual void* BeginModifyVertexBuffer(void* bufferHandle, size_t* outBufferSize);
 	virtual void EndModifyVertexBuffer(void* bufferHandle);
     virtual void* GetGraphicsInterface();
+    
+    virtual void CopyTexture(void* src, void* dst);
 private:
 	void CreateResources();
 
@@ -260,4 +262,15 @@ void* RenderAPI_Metal::GetGraphicsInterface(){
     return m_MetalGraphics;
 }
 
+void RenderAPI_Metal::CopyTexture(void* src, void *dst){\
+    id<MTLTexture> srcTexture = CFBridgingRelease(src);
+    id<MTLTexture> dstTexture = (__bridge id<MTLTexture>)dst;
+    NSLog(@"MYTY Webcam : src %@ dst %@",srcTexture, dstTexture);
+    id<MTLCommandBuffer> cmd = [[m_MetalGraphics->MetalDevice() newCommandQueue] commandBuffer];
+    id<MTLBlitCommandEncoder> blitEncoder = [cmd blitCommandEncoder];
+    [blitEncoder copyFromTexture:srcTexture toTexture:dstTexture];
+    [blitEncoder endEncoding];
+    [cmd commit];
+    [cmd waitUntilCompleted];
+}
 #endif // #if SUPPORT_METAL

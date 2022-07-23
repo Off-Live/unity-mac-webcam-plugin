@@ -49,6 +49,8 @@ public:
 	virtual void EndModifyVertexBuffer(void* bufferHandle) = 0;
     
     virtual void* GetGraphicsInterface()=0;
+    
+    virtual void CopyTexture(void* src, void *dst) = 0;
 };
 
 
