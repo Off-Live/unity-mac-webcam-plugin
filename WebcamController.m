@@ -151,6 +151,17 @@
     
     return -1;
 }
+
+-(int)getNumDevices{
+    NSArray* devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    return [devices count];
+}
+
+-(NSString*) getDeviceName:(int)index{
+    NSArray* devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    return [devices[index] localizedName];
+}
+
 +(NSString*) GetFormatName:(int)type{
     
     switch (type) {

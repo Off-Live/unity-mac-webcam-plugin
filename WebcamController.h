@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(int) getHeight;
 
 -(int) getNumDevices;
--(NSString*) getDeviceName;
+-(NSString*) getDeviceName: (int) index;
 
 +(NSString*) GetFormatName: (int) type;
 

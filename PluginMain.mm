@@ -138,13 +138,10 @@ extern "C" UnityRenderingEvent UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetRen
 	return OnRenderEvent;
 }
 
-
-
-extern "C" int UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API InitPlugin(void){
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API InitPlugin(void){
     if(webcam){
         [webcam initCaptureSession];
     }
-    return 1;
 }
 
 extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UninitPlugin(void){
@@ -186,7 +183,7 @@ extern "C" int UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetTexHeight(){
 
 extern "C"  id<MTLTexture>  UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetTexturePtr(void){
     if(webcam){
-        if(webcam.metalTexture){
+        if(webcam.metalTexture && g_TextureHandle){
             s_CurrentAPI->CopyTexture((void*)CFBridgingRetain(webcam.metalTexture), g_TextureHandle);
             return webcam.metalTexture;
         }else return nil;
@@ -199,4 +196,21 @@ extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API ReleaseTexture(void){
     if(webcam){
         [webcam releaseTexture];
     }
+}
+
+extern "C" int UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetNumDevices(void){
+    if(webcam){
+        return [webcam getNumDevices];
+    }
+    return -1;
+}
+
+extern "C" char* UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetDeviceName(int index){
+    if(!webcam) return NULL;
+    int n = [webcam getNumDevices];
+    if(index<0 || index>=n) return NULL;
+    const char * cstr = [[webcam getDeviceName:index] UTF8String];
+    char* retStr = (char*) malloc(strlen(cstr)+1);
+    strcpy(retStr, cstr);
+    return retStr;
 }
