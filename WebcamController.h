@@ -33,7 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) stopCapture;
 -(void) releaseTexture;
 
+-(int) getWidth;
+-(int) getHeight;
 
+-(int) getNumDevices;
+-(NSString*) getDeviceName;
 
 +(NSString*) GetFormatName: (int) type;
 

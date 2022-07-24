@@ -13,8 +13,6 @@ RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 		return CreateRenderAPI_Metal();
 	}
 #endif // if SUPPORT_METAL
-
-
 	// Unknown or unsupported graphics API
 	return NULL;
 }
