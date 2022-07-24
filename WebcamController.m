@@ -6,8 +6,9 @@
 //
 
 #import "WebcamController.h"
-@import Metal;
-@import MetalKit;
+#import <Metal/Metal.h>
+#import <MetalKit/MetalKit.h>
+
 
 @implementation WebcamController
 
@@ -22,7 +23,6 @@
 {
     [self stopCapture];
     _session = nil;
-    CFRelease(_textureCache);
     
     NSLog(@"MYTY Webcam : webcam deinit %hhd", [_thread isExecuting]);
     
@@ -41,7 +41,6 @@
 
 -(void) doWork
 {
-    _metalDevice = MTLCreateSystemDefaultDevice();
     CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, _metalDevice, nil, &_textureCache);
     
     _runLoop = CFRunLoopGetCurrent();
@@ -77,7 +76,7 @@
 
     [video_output setVideoSettings:@{
         (NSString*)kCVPixelBufferPixelFormatTypeKey:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
-        (NSString*)kCVPixelBufferWidthKey : [NSNumber numberWithInt:720],
+        (NSString*)kCVPixelBufferWidthKey : [NSNumber numberWithInt:640],
         (NSString*)kCVPixelBufferHeightKey : [NSNumber numberWithInt:360],
         
     }];
@@ -125,7 +124,7 @@
         CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, _textureCache, frame, nil, MTLPixelFormatBGRA8Unorm, width, height, 0, &_imageTexture);
     
         self.metalTexture = CVMetalTextureGetTexture(_imageTexture);
-        NSLog(@"MYTY Webcam : %lu %lu %lu %@",_metalTexture.width, _metalTexture.height, _metalTexture.pixelFormat, _metalTexture);
+        //NSLog(@"MYTY Webcam : %lu %lu %lu %@",_metalTexture.width, _metalTexture.height, _metalTexture.pixelFormat, _metalTexture);
         
     }
 }
@@ -135,6 +134,32 @@
         CVBufferRelease(_imageTexture);
         _imageTexture = nil;
     }
+}
+
+-(int)getWidth{
+    if(self.metalTexture){
+        return self.metalTexture.width;
+    }
+    
+    return -1;
+}
+
+-(int)getHeight{
+    if(self.metalTexture){
+        return self.metalTexture.height;
+    }
+    
+    return -1;
+}
+
+-(int)getNumDevices{
+    NSArray* devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    return [devices count];
+}
+
+-(NSString*) getDeviceName:(int)index{
+    NSArray* devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    return [devices[index] localizedName];
 }
 
 +(NSString*) GetFormatName:(int)type{

@@ -7,21 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E5DB5B46288B85EB00295CE0 /* Plugin.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DB5B45288B85EB00295CE0 /* Plugin.m */; };
-		E5DB5B4A288B891D00295CE0 /* WebcamController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DB5B49288B891D00295CE0 /* WebcamController.m */; };
 		E5DB5B4F288B8D2200295CE0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5DB5B4E288B8D2200295CE0 /* AVFoundation.framework */; };
 		E5DB5B51288B8D2800295CE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5DB5B50288B8D2800295CE0 /* CoreGraphics.framework */; };
+		E5DB5B65288BE27D00295CE0 /* RenderAPI_Metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = E5DB5B5D288BE27D00295CE0 /* RenderAPI_Metal.mm */; };
+		E5DB5B69288BE27D00295CE0 /* RenderAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5DB5B62288BE27D00295CE0 /* RenderAPI.cpp */; };
+		E5DB5B6D288BF7EB00295CE0 /* PluginMain.mm in Sources */ = {isa = PBXBuildFile; fileRef = E5DB5B6C288BF7EB00295CE0 /* PluginMain.mm */; };
+		E5DB5B6F288BF80D00295CE0 /* WebcamController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DB5B6E288BF80D00295CE0 /* WebcamController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E5DB5B3E288B83EC00295CE0 /* UnityMacWebcamPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnityMacWebcamPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		E5DB5B45288B85EB00295CE0 /* Plugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Plugin.m; sourceTree = "<group>"; };
-		E5DB5B47288B86FE00295CE0 /* Plugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Plugin.h; sourceTree = "<group>"; };
 		E5DB5B48288B891D00295CE0 /* WebcamController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebcamController.h; sourceTree = "<group>"; };
-		E5DB5B49288B891D00295CE0 /* WebcamController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebcamController.m; sourceTree = "<group>"; };
 		E5DB5B4E288B8D2200295CE0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		E5DB5B50288B8D2800295CE0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E5DB5B52288B8D9500295CE0 /* Property.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Property.entitlements; sourceTree = "<group>"; };
+		E5DB5B53288BE19B00295CE0 /* IUnityInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityInterface.h; path = Unity/IUnityInterface.h; sourceTree = "<group>"; };
+		E5DB5B54288BE19B00295CE0 /* IUnityGraphicsMetal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityGraphicsMetal.h; path = Unity/IUnityGraphicsMetal.h; sourceTree = "<group>"; };
+		E5DB5B58288BE19B00295CE0 /* IUnityGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IUnityGraphics.h; path = Unity/IUnityGraphics.h; sourceTree = "<group>"; };
+		E5DB5B5B288BE27D00295CE0 /* RenderAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderAPI.h; sourceTree = "<group>"; };
+		E5DB5B5D288BE27D00295CE0 /* RenderAPI_Metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenderAPI_Metal.mm; sourceTree = "<group>"; };
+		E5DB5B60288BE27D00295CE0 /* PlatformBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlatformBase.h; sourceTree = "<group>"; };
+		E5DB5B62288BE27D00295CE0 /* RenderAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderAPI.cpp; sourceTree = "<group>"; };
+		E5DB5B6C288BF7EB00295CE0 /* PluginMain.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PluginMain.mm; sourceTree = "<group>"; };
+		E5DB5B6E288BF80D00295CE0 /* WebcamController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebcamController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,11 +48,17 @@
 		E5DB5B35288B83EC00295CE0 = {
 			isa = PBXGroup;
 			children = (
+				E5DB5B6C288BF7EB00295CE0 /* PluginMain.mm */,
+				E5DB5B60288BE27D00295CE0 /* PlatformBase.h */,
+				E5DB5B5D288BE27D00295CE0 /* RenderAPI_Metal.mm */,
+				E5DB5B62288BE27D00295CE0 /* RenderAPI.cpp */,
+				E5DB5B5B288BE27D00295CE0 /* RenderAPI.h */,
+				E5DB5B58288BE19B00295CE0 /* IUnityGraphics.h */,
+				E5DB5B54288BE19B00295CE0 /* IUnityGraphicsMetal.h */,
+				E5DB5B53288BE19B00295CE0 /* IUnityInterface.h */,
 				E5DB5B52288B8D9500295CE0 /* Property.entitlements */,
 				E5DB5B48288B891D00295CE0 /* WebcamController.h */,
-				E5DB5B49288B891D00295CE0 /* WebcamController.m */,
-				E5DB5B47288B86FE00295CE0 /* Plugin.h */,
-				E5DB5B45288B85EB00295CE0 /* Plugin.m */,
+				E5DB5B6E288BF80D00295CE0 /* WebcamController.m */,
 				E5DB5B3F288B83EC00295CE0 /* Products */,
 				E5DB5B4D288B8D2200295CE0 /* Frameworks */,
 			);
@@ -134,8 +148,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5DB5B4A288B891D00295CE0 /* WebcamController.m in Sources */,
-				E5DB5B46288B85EB00295CE0 /* Plugin.m in Sources */,
+				E5DB5B69288BE27D00295CE0 /* RenderAPI.cpp in Sources */,
+				E5DB5B65288BE27D00295CE0 /* RenderAPI_Metal.mm in Sources */,
+				E5DB5B6F288BF80D00295CE0 /* WebcamController.m in Sources */,
+				E5DB5B6D288BF7EB00295CE0 /* PluginMain.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

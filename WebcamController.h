@@ -17,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WebcamController(){
     AVCaptureSession* _session;
-    id<MTLDevice> _metalDevice;
     CVMetalTextureCacheRef _textureCache;
     CFRunLoopRef _runLoop;
     NSThread * _thread;
@@ -26,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @property (nonatomic, weak) id<MTLTexture> metalTexture;
-
+@property (nonatomic, weak) id<MTLDevice> metalDevice;
 
 -(void) initCaptureSession;
 -(void) doWork;
@@ -34,7 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) stopCapture;
 -(void) releaseTexture;
 
+-(int) getWidth;
+-(int) getHeight;
 
+-(int) getNumDevices;
+-(NSString*) getDeviceName: (int) index;
 
 +(NSString*) GetFormatName: (int) type;
 
