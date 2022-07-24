@@ -16,6 +16,7 @@
 {
     self = [super init];
     _startedCV = [[NSCondition alloc] init];
+    _deviceIndex = 0;
     return self;
 }
 
@@ -44,39 +45,16 @@
     CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, _metalDevice, nil, &_textureCache);
     
     _runLoop = CFRunLoopGetCurrent();
-    
     _session = [[AVCaptureSession alloc] init];
-   
-    
-    AVCaptureDevice *device = nil;
-    AVCaptureDeviceInput *device_input = nil;
     AVCaptureVideoDataOutput *video_output = nil;
     
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    
-    for(AVCaptureDevice* dev in devices){
-        if([[dev localizedName] isEqualToString:@"FaceTime HD Camera"]){
-            device = dev;
-        }
-    }
-    
-    NSError *error;
-    
-    device_input = [[AVCaptureDeviceInput alloc] initWithDevice:device error:&error];
-    if(error){
-        NSLog(@"MYTY Webcam : Error in create device input : %@", [error description]);
-    }
-    
-    if([_session canAddInput:device_input])
-        [_session addInput:device_input];
-    else
-        NSLog(@"MYTY Webcam : Cannot add device input");
+    [self selectDeviceWithIndex:0];
     
     video_output = [[AVCaptureVideoDataOutput alloc] init];
 
     [video_output setVideoSettings:@{
         (NSString*)kCVPixelBufferPixelFormatTypeKey:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
-        (NSString*)kCVPixelBufferWidthKey : [NSNumber numberWithInt:640],
+        (NSString*)kCVPixelBufferWidthKey : [NSNumber numberWithInt:720], //Actual width is 640 (in M1 MAX)
         (NSString*)kCVPixelBufferHeightKey : [NSNumber numberWithInt:360],
         
     }];
@@ -124,7 +102,7 @@
         CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, _textureCache, frame, nil, MTLPixelFormatBGRA8Unorm, width, height, 0, &_imageTexture);
     
         self.metalTexture = CVMetalTextureGetTexture(_imageTexture);
-        //NSLog(@"MYTY Webcam : %lu %lu %lu %@",_metalTexture.width, _metalTexture.height, _metalTexture.pixelFormat, _metalTexture);
+        NSLog(@"MYTY Webcam : %lu %lu %lu %@",_metalTexture.width, _metalTexture.height, _metalTexture.pixelFormat, _metalTexture);
         
     }
 }
@@ -160,6 +138,52 @@
 -(NSString*) getDeviceName:(int)index{
     NSArray* devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     return [devices[index] localizedName];
+}
+
+-(void)selectDeviceWithName:(NSString *)name{
+    NSArray* devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    
+    for(int i=0;i<[devices count];i++){
+        if([[devices[i] localizedName] isEqualToString:name]){
+            [self selectDeviceWithIndex:i];
+            return;
+        }
+    }
+    [self selectDeviceWithIndex:0];
+}
+
+-(void)selectDeviceWithIndex:(int)index{
+    bool isRunning = [_session isRunning];
+    if(isRunning) [_session stopRunning];
+    
+    _deviceIndex = index;
+    
+    if(_currentInput){
+        [_session removeInput:_currentInput];
+    }
+    
+    AVCaptureDevice *device = nil;
+    AVCaptureDeviceInput *device_input = nil;
+    
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    
+    if(_deviceIndex>=[devices count] || _deviceIndex<0) _deviceIndex = 0;
+    device = devices[_deviceIndex];
+    
+    NSError *error;
+    
+    device_input = [[AVCaptureDeviceInput alloc] initWithDevice:device error:&error];
+    if(error){
+        NSLog(@"MYTY Webcam : Error in create device input : %@", [error description]);
+    }
+    
+    if([_session canAddInput:device_input])
+        [_session addInput:device_input];
+    else
+        NSLog(@"MYTY Webcam : Cannot add device input");
+    
+    _currentInput = device_input;
+    if(isRunning) [_session startRunning];
 }
 
 +(NSString*) GetFormatName:(int)type{

@@ -22,10 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
     NSThread * _thread;
     NSCondition* _startedCV;
     CVMetalTextureRef _imageTexture;
+    AVCaptureDeviceInput* _currentInput;
 }
 
 @property (nonatomic, weak) id<MTLTexture> metalTexture;
 @property (nonatomic, weak) id<MTLDevice> metalDevice;
+@property (nonatomic) int deviceIndex;
 
 -(void) initCaptureSession;
 -(void) doWork;
@@ -35,9 +37,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(int) getWidth;
 -(int) getHeight;
-
 -(int) getNumDevices;
+
 -(NSString*) getDeviceName: (int) index;
+-(void) selectDeviceWithIndex:(int) index;
+-(void) selectDeviceWithName:(NSString*) name;
+
 
 +(NSString*) GetFormatName: (int) type;
 

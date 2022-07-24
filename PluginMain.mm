@@ -180,15 +180,18 @@ extern "C" int UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetTexHeight(){
     return -1;
 }
 
+extern "C"  id<MTLTexture> UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetTexturePtr(void){
+    if(!webcam) return nil;
+    return webcam.metalTexture;
+}
 
-extern "C"  id<MTLTexture>  UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetTexturePtr(void){
-    if(webcam){
-        if(webcam.metalTexture && g_TextureHandle){
-            s_CurrentAPI->CopyTexture((void*)CFBridgingRetain(webcam.metalTexture), g_TextureHandle);
-            return webcam.metalTexture;
-        }else return nil;
+extern "C"  void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API CopyTexture(void){
+    if(!webcam) return;
+    if(webcam.metalTexture && g_TextureHandle){
+        s_CurrentAPI->CopyTexture((void*)CFBridgingRetain(webcam.metalTexture), g_TextureHandle);
+     
     }
-    return nil;
+
 }
 
 
@@ -213,4 +216,14 @@ extern "C" char* UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetDeviceName(int in
     char* retStr = (char*) malloc(strlen(cstr)+1);
     strcpy(retStr, cstr);
     return retStr;
+}
+
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SelectDeviceWithIndex(int index){
+    if(!webcam) return;
+    [webcam selectDeviceWithIndex:index];
+}
+
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SelectDeviceWithName(char* name){
+    if(!webcam) return;
+    [webcam selectDeviceWithName:[NSString stringWithUTF8String:name]];
 }
