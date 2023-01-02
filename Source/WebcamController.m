@@ -102,7 +102,6 @@
         CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, _textureCache, frame, nil, MTLPixelFormatBGRA8Unorm, width, height, 0, &_imageTexture);
     
         self.metalTexture = CVMetalTextureGetTexture(_imageTexture);
-        NSLog(@"MYTY Webcam : %lu %lu %lu %@",_metalTexture.width, _metalTexture.height, _metalTexture.pixelFormat, _metalTexture);
         
     }
 }

@@ -63,7 +63,6 @@ void* RenderAPI_Metal::GetGraphicsInterface(){
 void RenderAPI_Metal::CopyTexture(void* src, void *dst){\
     id<MTLTexture> srcTexture = CFBridgingRelease(src);
     id<MTLTexture> dstTexture = (__bridge id<MTLTexture>)dst;
-    NSLog(@"MYTY Webcam : src %@ dst %@",srcTexture, dstTexture);
     id<MTLCommandBuffer> cmd = [[m_MetalGraphics->MetalDevice() newCommandQueue] commandBuffer];
     id<MTLBlitCommandEncoder> blitEncoder = [cmd blitCommandEncoder];
     [blitEncoder copyFromTexture:srcTexture toTexture:dstTexture];
